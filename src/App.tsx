@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
 
 function App() {
-  const [city, setCity] = useState("")
   const [weatherData, setWeatherData] = useState<any>({})
 
-  const handleSearch = () => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?appid=49b33b68191e4c1248e5763aafd8b662&lat=30&lon=30&units=metric`).then(response => {
-      console.log(response.data)
-      setWeatherData(response.data)
+  const updateLocation = () => {
+    navigator.geolocation.getCurrentPosition(function({coords}) {
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?appid=49b33b68191e4c1248e5763aafd8b662&lat=${coords.latitude}&lon=${coords.longitude}&units=metric`).then(response => {
+        console.log(response.data)
+        setWeatherData(response.data)
+      })
     })
+   
   }
 
-  const handleChange = (e: any) => {
-    console.log(e.target.value)
-    setCity(e.target.value)
-  }
+  useEffect(() => {
+    updateLocation()
+  }, [])
 
   return (
     <div>
@@ -31,24 +32,11 @@ function App() {
           <p className="lead">        
             Write your city in the field below and click search
           </p>
-
-          <div className="row mb-4">
-            <div className="col-md-6">
-              <input
-                onChange={handleChange}
-                className="form-control"
-                value={city} />
-            </div>
-          </div>
-
-          <button onClick={handleSearch} className="btn btn-primary">
-            Search
-          </button>
           
           <div>
             <blockquote className="blockquote">
               {
-                weatherData.main && <p className="mb-0">The current temperature is:{weatherData.main.temp}°F</p>
+                weatherData.main && <p className="mb-0">The current temperature is:{weatherData.main.temp}°C</p>
               }
             </blockquote>
           </div>
