@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios';
-
 
 function App() {
   const [city, setCity] = useState("")
   const [weatherData, setWeatherData] = useState<any>({})
-  // const [icon, setIcon] = useState("")
-
 
   const handleSearch = () => {
     axios.get(`https://api.openweathermap.org/data/2.5/weather?appid=49b33b68191e4c1248e5763aafd8b662&lat=30&lon=30&units=metric`).then(response => {
@@ -14,7 +11,6 @@ function App() {
       setWeatherData(response.data)
     })
   }
-
 
   const handleChange = (e: any) => {
     console.log(e.target.value)
@@ -24,9 +20,9 @@ function App() {
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a className="navbar-brand text-white">
+        <h1 className="navbar-brand text-white">
           Weather Forecast
-        </a>
+        </h1>
       </nav>
       
       <main className="container">
@@ -48,7 +44,6 @@ function App() {
           <button onClick={handleSearch} className="btn btn-primary">
             Search
           </button>
-          
           
           <div>
             <blockquote className="blockquote">
